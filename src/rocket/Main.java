@@ -1,11 +1,14 @@
 package rocket;
 
-
 import rocket.simulation.Rocket;
 import rocket.simulation.Simulator;
+import rocket.simulation.Simulator.FlightData;
 import rocket.output.ConsolePrinter;
-import java.util.List;
+import rocket.ui.TrajectoryVisualizer;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -19,7 +22,29 @@ public class Main {
         Simulator simulator = new Simulator(rocket);
 
         simulator.run();
-        List<Simulator.FlightData> results = simulator.getResults();
+        List<FlightData> results = simulator.getResults();
         ConsolePrinter.print(results);
+
+
+        double maxAlt = results.stream().mapToDouble(f -> f.altitude).max().orElse(1);
+        double minAlt = results.stream().mapToDouble(f -> f.altitude).min().orElse(0);
+        double altRange = maxAlt - minAlt;
+
+        int panelHeight = 600;
+        int panelWidth = 800;
+
+
+        List<Point> drawPoints = new ArrayList<>();
+
+        for (FlightData data : results) {
+            int x = (int)(data.time * 2); // Adjust time scale here as needed
+
+            // Normalize altitude to 0–1, then invert (because screen y grows downward)
+            double norm = (data.altitude - minAlt) / altRange;
+            int y = (int)((1.0 - norm) * panelHeight);
+
+            drawPoints.add(new Point(x, y));
+        }
+        TrajectoryVisualizer.display(drawPoints);
     }
 }

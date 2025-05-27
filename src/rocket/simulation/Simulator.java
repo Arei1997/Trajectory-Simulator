@@ -6,7 +6,7 @@ import java.util.List;
 public class Simulator {
 
     private Rocket rocket;
-    private double timeStep = 0.1;
+    private double timeStep = 0.01;
     private List<FlightData> results;
 
     public Simulator(Rocket rocket) {
@@ -44,7 +44,7 @@ public class Simulator {
         double dryMass = 20000.0;
 
 
-        while (m > dryMass && h >= 0) {
+        while (h >= 0) {
 
             double rho0 = 1.225;
             double H    = 8500.0;
@@ -75,7 +75,8 @@ public class Simulator {
             results.add(new FlightData(t, h, v, acceleration));
 
 
-            if (h < 0) break;
+            if (h <= 0 && v <= 0) break;
+
         }
     }
 
