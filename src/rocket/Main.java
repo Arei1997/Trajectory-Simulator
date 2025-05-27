@@ -37,9 +37,9 @@ public class Main {
         List<Point> drawPoints = new ArrayList<>();
 
         for (FlightData data : results) {
-            int x = (int)(data.time * 2); // Adjust time scale here as needed
+            int x = (int)(data.time * 2);
 
-            // Normalize altitude to 0–1, then invert (because screen y grows downward)
+            // normalize altitude to 0–1
             double norm = (data.altitude - minAlt) / altRange;
             int y = (int)((1.0 - norm) * panelHeight);
 
